@@ -34,17 +34,12 @@ class BlacklistSnowflake(View):
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="Blacklist", style=ButtonStyle.green)
     async def blacklist_button(self, button: Button, interaction: MessageInteraction):
         cursor = await self.bot._db.cursor()
-        await cursor.execute(
-            f"SELECT * FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,)
-        )
+        await cursor.execute(f"SELECT * FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,))
         result = await cursor.fetchall()
 
         if not result:
@@ -60,9 +55,7 @@ class BlacklistSnowflake(View):
             )
             message: Message = await self.bot.wait_for("message", check=self.check)
             if message.content == "q":
-                return await interaction.message.reply(
-                    "Cancelled the current `wait_for`"
-                )
+                return await interaction.message.reply("Cancelled the current `wait_for`")
 
             await message.add_reaction(THUMBS_UP)
 
@@ -80,7 +73,7 @@ class BlacklistSnowflake(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "Blacklist/Unblacklist",
-                path=f"blacklist/",
+                path="blacklist/",
                 description=f"Blacklisted {self.snowflake.name} from commands: {content}",
             )
             return await self.bot_message.edit(embed=embed, view=Blacklist(self.ctx))
@@ -88,9 +81,7 @@ class BlacklistSnowflake(View):
     @button(label="Unblacklist", style=ButtonStyle.green)
     async def unblacklist_button(self, button: Button, interaction: MessageInteraction):
         cursor = await self.bot._db.cursor()
-        await cursor.execute(
-            f"SELECT * FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,)
-        )
+        await cursor.execute(f"SELECT * FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,))
         result = await cursor.fetchall()
 
         if not result:
@@ -112,9 +103,7 @@ class BlacklistSnowflake(View):
         await interaction.response.defer()
 
         cursor = await self.bot._db.cursor()
-        await cursor.execute(
-            f"DELETE FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,)
-        )
+        await cursor.execute(f"DELETE FROM blacklist WHERE {self._type}_id = ?", (self.snowflake.id,))
         await self.bot._db.commit()
 
         embed = EmbedFactory.static_embed(
@@ -139,15 +128,10 @@ class Blacklist(View):
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="User", style=ButtonStyle.green)
-    async def blacklist_user_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def blacklist_user_button(self, button: Button, interaction: MessageInteraction):
         name = "user"
 
         embed = EmbedFactory.static_embed(
@@ -180,7 +164,10 @@ class Blacklist(View):
                     self.ctx,
                     "Blacklist/Unblacklist",
                     path="blacklist/{name}/other",
-                    description=f"I could not find a {name} user with id/name {message.content}, but i found a {type(other_response)} {other_response}",
+                    description=(
+                        f"I could not find a {name} user with id/name {message.content},"
+                        f"but i found a {type(other_response)} {other_response}"
+                    ),
                 )
                 await message.add_reaction(ERROR)
                 return await self.bot_message.edit(embed=embed)
@@ -202,14 +189,10 @@ class Blacklist(View):
             description=f"I found {response}",
         )
         await message.add_reaction(THUMBS_UP)
-        await self.bot_message.edit(
-            embed=embed, view=BlacklistSnowflake(self.ctx, response)
-        )
+        await self.bot_message.edit(embed=embed, view=BlacklistSnowflake(self.ctx, response))
 
     @button(label="Channel", style=ButtonStyle.green)
-    async def blacklist_channel_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def blacklist_channel_button(self, button: Button, interaction: MessageInteraction):
         name = "channel"
 
         embed = EmbedFactory.static_embed(
@@ -242,7 +225,10 @@ class Blacklist(View):
                     self.ctx,
                     "Blacklist/Unblacklist",
                     path="blacklist/{name}/other",
-                    description=f"I could not find a {name} with id/name {message.content}, but i found a {type(other_response)} {other_response}",
+                    description=(
+                        f"I could not find a {name} with id/name {message.content},"
+                        f"but i found a {type(other_response)} {other_response}"
+                    ),
                 )
                 await message.add_reaction(ERROR)
                 return await self.bot_message.edit(embed=embed)
@@ -264,14 +250,10 @@ class Blacklist(View):
             description=f"I found {response}",
         )
         await message.add_reaction(THUMBS_UP)
-        await self.bot_message.edit(
-            embed=embed, view=BlacklistSnowflake(self.ctx, response)
-        )
+        await self.bot_message.edit(embed=embed, view=BlacklistSnowflake(self.ctx, response))
 
     @button(label="Guild", style=ButtonStyle.green)
-    async def blacklist_guild_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def blacklist_guild_button(self, button: Button, interaction: MessageInteraction):
         name = "guild"
 
         embed = EmbedFactory.static_embed(
@@ -304,7 +286,10 @@ class Blacklist(View):
                     self.ctx,
                     "Blacklist/Unblacklist",
                     path="blacklist/{name}/other",
-                    description=f"I could not find a {name} with id/name {message.content}, but i found a {type(other_response)} {other_response}",
+                    description=(
+                        f"I could not find a {name} with id/name {message.content},"
+                        f"but i found a {type(other_response)} {other_response}"
+                    ),
                 )
                 await message.add_reaction(ERROR)
                 return await self.bot_message.edit(embed=embed)
@@ -326,6 +311,4 @@ class Blacklist(View):
             description=f"I found {response}",
         )
         await message.add_reaction(THUMBS_UP)
-        await self.bot_message.edit(
-            embed=embed, view=BlacklistSnowflake(self.ctx, response)
-        )
+        await self.bot_message.edit(embed=embed, view=BlacklistSnowflake(self.ctx, response))

@@ -14,9 +14,7 @@ from disnake.ext import commands
 from disnake.ext.commands import Context, Bot
 
 
-async def eval_code(
-    message: Message, local_variables: dict, method: str = "None"
-) -> str:
+async def eval_code(message: Message, local_variables: dict, method: str = "None") -> str:
     code = clean_code(message.content)
     message = clean_code(message.content)
 
@@ -73,10 +71,7 @@ class Eval(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="Eval", style=ButtonStyle.green)
     async def eval_button(self, button: Button, interaction: MessageInteraction):
@@ -87,14 +82,11 @@ class Eval(View):
         embed = EmbedFactory.static_embed(self.ctx, "Evaluate code", path="eval/code")
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What code would you like to evaluate?", ephemeral=True
-        )
+        await interaction.response.send_message("What code would you like to evaluate?", ephemeral=True)
 
         message: Message = await self.bot.wait_for(
             "message",
-            check=lambda m: m.author == self.ctx.author
-            and m.channel == self.ctx.channel,
+            check=lambda m: m.author == self.ctx.author and m.channel == self.ctx.channel,
         )
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
@@ -129,14 +121,11 @@ class Eval(View):
         embed = EmbedFactory.static_embed(self.ctx, "Evaluate code", path="eval/code")
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What code would you like to evaluate?", ephemeral=True
-        )
+        await interaction.response.send_message("What code would you like to evaluate?", ephemeral=True)
 
         message: Message = await self.bot.wait_for(
             "message",
-            check=lambda m: m.author == self.ctx.author
-            and m.channel == self.ctx.channel,
+            check=lambda m: m.author == self.ctx.author and m.channel == self.ctx.channel,
         )
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
@@ -171,14 +160,11 @@ class Eval(View):
         embed = EmbedFactory.static_embed(self.ctx, "Evaluate code", path="eval/code")
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What code would you like to evaluate?", ephemeral=True
-        )
+        await interaction.response.send_message("What code would you like to evaluate?", ephemeral=True)
 
         message: Message = await self.bot.wait_for(
             "message",
-            check=lambda m: m.author == self.ctx.author
-            and m.channel == self.ctx.channel,
+            check=lambda m: m.author == self.ctx.author and m.channel == self.ctx.channel,
         )
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")

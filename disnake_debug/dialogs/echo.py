@@ -37,10 +37,7 @@ class Channel(View):
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @classmethod
     async def create(cls, ctx: Context, channel: TextChannel):
@@ -110,9 +107,7 @@ class Channel(View):
             return
         await self.message_deleted(message)
 
-    async def specific_channel_message_edited(
-        self, before: Message, after: Message
-    ) -> None:
+    async def specific_channel_message_edited(self, before: Message, after: Message) -> None:
         if before.channel.id != self.channel.id:
             return
         if before.author.bot and before.author != self.bot.user:
@@ -120,17 +115,11 @@ class Channel(View):
         await self.message_edited(before, after)
 
     @button(label="Send message", style=ButtonStyle.green)
-    async def send_message_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def send_message_button(self, button: Button, interaction: MessageInteraction):
         if not self.channel.permissions_for(self.ctx.me).send_messages:
-            return await interaction.response.send_message(
-                "I do not have permissions to send messages", ephemeral=True
-            )
+            return await interaction.response.send_message("I do not have permissions to send messages", ephemeral=True)
 
-        await interaction.response.send_message(
-            "What would you like to say?", ephemeral=True
-        )
+        await interaction.response.send_message("What would you like to say?", ephemeral=True)
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
@@ -138,9 +127,7 @@ class Channel(View):
         await self.channel.send(message.content)
 
     @button(label="Delete message", style=ButtonStyle.green)
-    async def delete_message_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def delete_message_button(self, button: Button, interaction: MessageInteraction):
         if not self.channel.permissions_for(self.ctx.me).manage_messages:
             return await interaction.response.send_message(
                 "I do not have permissions to delete messages", ephemeral=True
@@ -152,11 +139,9 @@ class Channel(View):
             return await interaction.message.reply("Cancelled the current `wait_for`")
 
         try:
-            deleteable = await self.channel.fetch_message(int(message.content))
+            deletable = await self.channel.fetch_message(int(message.content))
         except HTTPException:
-            return await interaction.send(
-                f"Could not find message with id {message.content}"
-            )
+            return await interaction.send(f"Could not find message with id {message.content}")
 
-        await deleteable.delete()
+        await deletable.delete()
         await message.add_reaction(THUMBS_UP)

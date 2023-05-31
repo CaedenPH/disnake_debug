@@ -7,7 +7,7 @@ from disnake.ext.commands import Context, Bot
 
 newline = "\n"
 bot_statistics = """
--> Bot ping: {0}    
+-> Bot ping: {0}
 -> Bot name: {1.user.name}
 -> Bot owners: {1.owner_ids}
 -> Bot uptime: {2}
@@ -30,10 +30,7 @@ class DebugView(View):
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
         self.bot_message = get_bot_message(self.ctx)
 
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     def check(self, m: Message) -> bool:
         return m.author == self.ctx.author and m.channel == self.ctx.channel
@@ -49,9 +46,7 @@ class DebugView(View):
 
         from . import Blacklist
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Blacklist/Unblacklist", path="blacklist"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Blacklist/Unblacklist", path="blacklist")
 
         await interaction.response.defer()
         await self.bot_message.edit(embed=embed, view=Blacklist(self.ctx))
@@ -68,9 +63,7 @@ class DebugView(View):
 
         from . import Change
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Change bot information", path="change"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Change bot information", path="change")
 
         await interaction.response.defer()
         await self.bot_message.edit(embed=embed, view=Change(self.ctx))
@@ -107,8 +100,8 @@ class DebugView(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "Speak as the bot",
-            path=f"echo/channel",
-            description=f"Send an id/name of the channel you want to view and send messages in",
+            path="echo/channel",
+            description="Send an id/name of the channel you want to view and send messages in",
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What id/name?", ephemeral=True)
@@ -124,7 +117,7 @@ class DebugView(View):
                 embed = EmbedFactory.static_embed(
                     self.ctx,
                     "Speak as the bot",
-                    path=f"echo/channel/notfound",
+                    path="echo/channel/notfound",
                     description=f"I could not find channel with id/name {message.content}",
                 )
                 return await self.bot_message.edit(embed=embed)
@@ -132,8 +125,11 @@ class DebugView(View):
                 embed = EmbedFactory.static_embed(
                     self.ctx,
                     "Speak as the bot",
-                    path=f"echo/channel/other",
-                    description=f"I could not find a channel with id/name {message.content}, but i found a {type(other_response)} {other_response}",
+                    path="echo/channel/other",
+                    description=(
+                        "I could not find a channel with id/name"
+                        f"{message.content}, but i found a {type(other_response)} {other_response}"
+                    ),
                 )
                 return await self.bot_message.edit(embed=embed)
 
@@ -141,14 +137,12 @@ class DebugView(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "Speak as the bot",
-                path=f"echo/channel/overload",
+                path="echo/channel/overload",
                 description=f"You were too broad! I found multiple **channels** with name {message.content}",
             )
             return await self.bot_message.edit(embed=embed)
 
-        await interaction.send(
-            "Loading messages...this might take a while if the channel contains long messages"
-        )
+        await interaction.send("Loading messages...this might take a while if the channel contains long messages")
         view = await Channel.create(self.ctx, response)
         await self.bot_message.edit(view=view)
 
@@ -222,9 +216,7 @@ class DebugView(View):
         await self.bot_message.edit(embed=embed, view=LeaveGuild(self.ctx))
 
     @button(label="Generate invite", style=ButtonStyle.blurple, row=1)
-    async def generate_invite_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def generate_invite_button(self, button: Button, interaction: MessageInteraction):
         """
         buttons:
             none
@@ -260,15 +252,17 @@ class DebugView(View):
             self.ctx,
             "Go to path",
             path="go_to",
-            description=f"Type the path you want to go to eg /blacklist/user\nNot all paths are available because some require additional info\nPaths are:\n{visual_paths}",
+            description=(
+                "Type the path you want to go to eg /blacklist/user\n"
+                "Not all paths are available because some require additional"
+                f"info\nPaths are:\n{visual_paths}"
+            ),
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What path?", ephemeral=True)
 
         message: Message
-        while (
-            (message := await self.bot.wait_for("message", check=self.check))
-        ).content.lower() != "q":
+        while ((message := await self.bot.wait_for("message", check=self.check))).content.lower() != "q":
             content = message.content.lower()
 
             if content in paths:
@@ -278,9 +272,7 @@ class DebugView(View):
                     path=f"{content}",
                     description=f"Moved to path {content}",
                 )
-                return await self.bot_message.edit(
-                    embed=embed, view=paths[content](self.ctx)
-                )
+                return await self.bot_message.edit(embed=embed, view=paths[content](self.ctx))
 
             embed = EmbedFactory.static_embed(
                 self.ctx,
@@ -314,7 +306,6 @@ class DebugView(View):
 
     @button(label="Stats", style=ButtonStyle.blurple, row=2)
     async def stats_button(self, button: Button, interaction: MessageInteraction):
-
         """
         buttons:
             none
@@ -349,7 +340,7 @@ class DebugView(View):
 
         embed = EmbedFactory.static_embed(
             self.ctx,
-            "Information about disnake-debug",
+            "Information about disnake_debug",
             path="help",
             description=DESCRIPTION,
         )

@@ -1,15 +1,12 @@
 import random
 import aiosqlite
 import os
-import sys
-import traceback
 
-from disnake import CommandInteraction
 
 from .utils import EmbedFactory
 from datetime import datetime
 from dotenv import load_dotenv
-from disnake.ext.commands import Cog, Context, Bot, CheckFailure, command
+from disnake.ext.commands import Cog, Context, Bot, command
 
 
 def get_database() -> str:
@@ -45,9 +42,13 @@ class Debug(Cog, name="debug"):
         days, hours = divmod(hours, 24)
 
         if _type == "strict":
-            return f"{days} days; {hours} hours; {minutes} minutes"
+            uptime = f"{days} days; {hours} hours; {minutes} minutes"
         elif _type == "lazy":
-            return f"I've been up for **{days}** Days, **{hours}** Hours, **{minutes}** Minutes, and **{seconds}** Seconds!"
+            uptime = (
+                f"I've been up for **{days}** Days, **{hours}** Hours,"
+                f"**{minutes}** Minutes, and **{seconds}** Seconds!"
+            )
+        return uptime
 
     def setup(self) -> None:
         bot = self.bot
@@ -102,9 +103,7 @@ class Debug(Cog, name="debug"):
             "guild_id": [ctx.guild.id, "your guild"],
         }.items():
             cursor = await self.bot._db.cursor()
-            await cursor.execute(
-                f"Select commands from blacklist where {key}=?", (value[0],)
-            )
+            await cursor.execute(f"Select commands from blacklist where {key}=?", (value[0],))
             result = await cursor.fetchone()
             if result:
                 result = result[0].split(",")
@@ -163,9 +162,7 @@ class Debug(Cog, name="debug"):
         from . import DebugView
 
         embed = EmbedFactory.static_embed(ctx, "Debug Controls")
-        self.bot._bot_messages[ctx.message.id] = await ctx.send(
-            embed=embed, view=DebugView(ctx)
-        )
+        self.bot._bot_messages[ctx.message.id] = await ctx.send(embed=embed, view=DebugView(ctx))
 
     @Cog.listener("on_slash_command")
     async def cache_slash_command(self, interaction):

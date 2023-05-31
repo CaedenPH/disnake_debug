@@ -56,10 +56,7 @@ class ViewInfo(View):
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     async def get_invite(self, channel: Union[TextChannel, Guild]) -> str:
         if isinstance(channel, Guild):
@@ -71,8 +68,8 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/user",
-            description=f"Send an id/name of the user you want to view",
+            path="view/user",
+            description="Send an id/name of the user you want to view",
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What id/name?", ephemeral=True)
@@ -86,7 +83,7 @@ class ViewInfo(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "View",
-                path=f"view/user/notfound",
+                path="view/user/notfound",
                 description=f"I could not find a user with id/name {message.content}",
             )
             await message.add_reaction(ERROR)
@@ -94,7 +91,7 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/user/info",
+            path="view/user/info",
             description=user_info.format(
                 response,
                 joined_at=response.created_at.strftime("%m/%d/%Y"),
@@ -109,8 +106,8 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/channel",
-            description=f"Send an id/name of the channel you want to view",
+            path="view/channel",
+            description="Send an id/name of the channel you want to view",
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What id/name?", ephemeral=True)
@@ -124,7 +121,7 @@ class ViewInfo(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "View",
-                path=f"view/channel/notfound",
+                path="view/channel/notfound",
                 description=f"I could not find a channel with id/name {message.content}",
             )
             await message.add_reaction(ERROR)
@@ -132,7 +129,7 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/channel/info",
+            path="view/channel/info",
             description=channel_info.format(
                 response,
                 created_at=response.created_at.strftime("%m/%d/%Y"),
@@ -147,8 +144,8 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/guild",
-            description=f"Send an id/name of the guild you want to view",
+            path="view/guild",
+            description="Send an id/name of the guild you want to view",
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What id/name?", ephemeral=True)
@@ -162,7 +159,7 @@ class ViewInfo(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "View",
-                path=f"view/guild/notfound",
+                path="view/guild/notfound",
                 description=f"I could not find a guild with id/name {message.content}",
             )
             await message.add_reaction(ERROR)
@@ -170,7 +167,7 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/guild/info",
+            path="view/guild/info",
             description=guild_info.format(
                 response,
                 created_at=response.created_at.strftime("%m/%d/%Y"),
@@ -189,8 +186,8 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "View",
-            path=f"view/emoji",
-            description=f"Send an id/name of the emoji you want to view",
+            path="view/emoji",
+            description="Send an id/name of the emoji you want to view",
         )
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message("What id/name?", ephemeral=True)
@@ -204,7 +201,7 @@ class ViewInfo(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "View",
-                path=f"view/emoji/notfound",
+                path="view/emoji/notfound",
                 description=f"I could not find an emoji with id/name {message.content}",
             )
             await message.add_reaction(ERROR)
@@ -212,7 +209,7 @@ class ViewInfo(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             f"View Emoji: {response}",
-            path=f"view/emoji/info",
+            path="view/emoji/info",
             description=emoji_info.format(
                 response,
                 created_at=response.created_at.strftime("%m/%d/%Y"),

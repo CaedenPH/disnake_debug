@@ -21,13 +21,11 @@ class Utilities:
         self.bot_message = get_bot_message(ctx)
 
     async def other_guilds(self, interaction: MessageInteraction, clicked: str) -> None:
-        guilds: List[Guild] = [
-            k for k in self.bot.guilds if ord(k.name.lower()) not in range(96, 123)
-        ]
+        guilds: List[Guild] = [k for k in self.bot.guilds if ord(k.name.lower()) not in range(96, 123)]
         if not guilds:
             embed = EmbedFactory.static_embed(
                 self.ctx,
-                f"Leave guild",
+                "Leave guild",
                 path="leave_guild/notfound",
                 description="I could not find any guilds that have special characters at the start!",
             )
@@ -36,15 +34,12 @@ class Utilities:
 
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/choose",
-            description="I am in these servers:\n"
-            + "\n".join([f"-> guild.name" for guild in guilds]),
+            description="I am in these servers:\n" + "\n".join(["-> guild.name" for guild in guilds]),
         )
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "Which guild would you like me to leave?"
-        )
+        await interaction.response.send_message("Which guild would you like me to leave?")
         for item in self.bot_message.components:
             if isinstance(item, Select):
                 item.disabled = True
@@ -52,8 +47,7 @@ class Utilities:
 
         message: Message = await self.bot.wait_for(
             "message",
-            check=lambda m: m.author == self.ctx.author
-            and m.channel == self.ctx.channel,
+            check=lambda m: m.author == self.ctx.author and m.channel == self.ctx.channel,
         )
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
@@ -65,22 +59,18 @@ class Utilities:
 
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/choose/confirm",
             description=f"Are you sure you want me to leave {selected_guild.name}?",
         )
-        await self.bot_message.edit(
-            embed=embed, view=LeaveGuildConfirm(self.ctx, selected_guild)
-        )
+        await self.bot_message.edit(embed=embed, view=LeaveGuildConfirm(self.ctx, selected_guild))
 
     async def find_guilds(self, interaction: MessageInteraction, clicked: str) -> None:
-        guilds: List[Guild] = [
-            k for k in self.bot.guilds if k.name.lower().startswith(clicked)
-        ]
+        guilds: List[Guild] = [k for k in self.bot.guilds if k.name.lower().startswith(clicked)]
         if not guilds:
             embed = EmbedFactory.static_embed(
                 self.ctx,
-                f"Leave guild",
+                "Leave guild",
                 path="leave_guild/notfound",
                 description=f"I could not find any guilds starting with {clicked}",
             )
@@ -89,22 +79,19 @@ class Utilities:
 
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/choose",
             description=", ".join([guild.name for guild in guilds]),
         )
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "Which guild would you like me to leave?"
-        )
+        await interaction.response.send_message("Which guild would you like me to leave?")
         view = View()
         view.add_item(MainMenu(self.ctx))
         await self.bot_message.edit(embed=embed, view=view)
 
         message: Message = await self.bot.wait_for(
             "message",
-            check=lambda m: m.author == self.ctx.author
-            and m.channel == self.ctx.channel,
+            check=lambda m: m.author == self.ctx.author and m.channel == self.ctx.channel,
         )
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
@@ -116,13 +103,11 @@ class Utilities:
 
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/choose/confirm",
             description=f"Are you sure you want me to leave {selected_guild.name}?",
         )
-        await self.bot_message.edit(
-            embed=embed, view=LeaveGuildConfirm(self.ctx, selected_guild)
-        )
+        await self.bot_message.edit(embed=embed, view=LeaveGuildConfirm(self.ctx, selected_guild))
 
 
 class LeaveGuildConfirm(View):
@@ -135,16 +120,13 @@ class LeaveGuildConfirm(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="Yes", style=ButtonStyle.green)
     async def confirm_button(self, button: Button, interaction: MessageInteraction):
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/leave",
             description=f"Left {self.guild.name}",
         )
@@ -161,7 +143,7 @@ class LeaveGuildConfirm(View):
     async def cancel_button(self, button: Button, interaction: MessageInteraction):
         embed = EmbedFactory.static_embed(
             self.ctx,
-            f"Leave guild",
+            "Leave guild",
             path="leave_guild/cancel",
             description=f"Didn't leave {self.guild.name}",
         )
@@ -174,10 +156,7 @@ class SelectPZ(Select):
 
         self.bot: Bot = ctx.bot
         self.utils = Utilities(ctx)
-        self.options = [
-            SelectOption(label=str(k), value=str(k))
-            for k in [chr(a) for a in range(112, 123)]
-        ]
+        self.options = [SelectOption(label=str(k), value=str(k)) for k in [chr(a) for a in range(112, 123)]]
         self.options.append(SelectOption(label="Other", value="other"))
 
     async def callback(self, interaction: MessageInteraction) -> None:
@@ -193,10 +172,7 @@ class SelectAO(Select):
 
         self.bot: Bot = ctx.bot
         self.utils = Utilities(ctx)
-        self.options = [
-            SelectOption(label=str(k), value=str(k))
-            for k in [chr(a) for a in range(97, 112)]
-        ]
+        self.options = [SelectOption(label=str(k), value=str(k)) for k in [chr(a) for a in range(97, 112)]]
         self.options.append(SelectOption(label="Other", value="other"))
 
     async def callback(self, interaction: MessageInteraction) -> None:
@@ -216,7 +192,4 @@ class LeaveGuild(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel

@@ -26,9 +26,7 @@ def clean_code(content: str):
     if content.startswith("```py"):
         content = content[5:-3]
     content = content.strip("`")
-    content = (
-        content.replace("‘", "'").replace("“", '"').replace("”", '"').replace("’", "'")
-    )
+    content = content.replace("‘", "'").replace("“", '"').replace("”", '"').replace("’", "'")
     return content
 
 
@@ -134,13 +132,15 @@ class EmbedFactory:
             Embed(
                 title=title,
                 colour=EMBED_COLOR,
-                description=f"```yaml\nCurrent path: /{path or ''}```{'```' + markdown + newline + description + '```' if description else ''}",
+                description=(
+                    f"```yaml\nCurrent path: /{path or ''}```" f"```{markdown}{newline}{description}" "```"
+                    if description
+                    else ""
+                ),
                 timestamp=ctx.message.created_at,
             )
             .set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            .set_footer(
-                text=f"Bot ping: {ctx.bot.latency * 1000:.0f} || Uptime: {ctx.bot._get_uptime()}"
-            )
+            .set_footer(text=f"Bot ping: {ctx.bot.latency * 1000:.0f} || Uptime: {ctx.bot._get_uptime()}")
         )
 
     @staticmethod

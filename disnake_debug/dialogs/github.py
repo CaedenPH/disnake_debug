@@ -18,17 +18,14 @@ class Github(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     def check(self, m: Message) -> bool:
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     @button(label="Push", style=ButtonStyle.green)
     async def push_button(self, button: Button, interaction: MessageInteraction):
-        if not ".git" in os.listdir(self.path):
+        if ".git" not in os.listdir(self.path):
             return await interaction.response.send_message(
                 "This command will not working because this is not a github directory (missing .git)"
             )
@@ -67,16 +64,14 @@ class Github(View):
 
     @button(label="Pull", style=ButtonStyle.green)
     async def pull_button(self, button: Button, interaction: MessageInteraction):
-        if not ".git" in os.listdir(self.path):
+        if ".git" not in os.listdir(self.path):
             return await interaction.response.send_message(
                 "This command will not working because this is not a github directory (missing .git)"
             )
 
         await interaction.response.defer()
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Git pull", path="github/pull", description="Pulling from github"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Git pull", path="github/pull", description="Pulling from github")
         git_commands = [["git", "stash"], ["git", "pull", "--ff-only"]]
 
         for git_command in git_commands:

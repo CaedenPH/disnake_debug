@@ -1,3 +1,5 @@
+# flake8: noqa
+
 import pathlib
 import os
 
@@ -20,7 +22,7 @@ Send the name of the commands you want to blacklist the user from.
     => Send 'all' to blacklist the user from every command
 """
 DESCRIPTION = f"""
-Welcome to disnake-debug v{VERSION}
+Welcome to disnake_debug v{VERSION}
 -----------------------------
 waiting:
     - when the bot sends a question (non-embed message) it is waiting for you to send a response to that question
@@ -48,7 +50,7 @@ try:
     os.environ["EMBED_COLOR"]
 except KeyError:
     with open("./.env", "a") as env:
-        env.write("\n#disnake-debug\nEMBED_COLOR = 0x0000ff")
+        env.write("\n#disnake_debug\nEMBED_COLOR = 0x0000ff")
 try:
     load_dotenv("./.env")
     EMBED_COLOR = int(os.environ["EMBED_COLOR"], 16)

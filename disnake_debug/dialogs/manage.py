@@ -20,10 +20,7 @@ class ConfirmShutdown(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     async def restart_bot(self) -> None:
         """
@@ -42,8 +39,13 @@ class ConfirmShutdown(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "Uh oh!",
-            path=f"manage/restart/error",
-            description=f"stderr: {self.stderr.decode()}\nstdout: {self.stdout.decode() if self.stdout else 'no stdout'}{newline + 'I am not shutting of the bot because I would error on startup' if self.stderr else ''}",
+            path="manage/restart/error",
+            description=(
+                f"stderr: {self.stderr.decode()}\nstdout: {self.stdout.decode() if self.stdout else 'no stdout'}"
+                f"{newline} I am not shutting of the bot because I would error on startup"
+                if self.stderr
+                else ""
+            ),
         )
         await self.bot_message.edit(embed=embed)
 
@@ -58,8 +60,8 @@ class ConfirmShutdown(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "Turned off bot",
-                path=f"manage/shut_down",
-                description=f"The bot is now offline",
+                path="manage/shut_down",
+                description="The bot is now offline",
             )
             await self.bot_message.edit(embed=embed)
             return await self.ctx.bot.close()
@@ -72,8 +74,8 @@ class ConfirmShutdown(View):
             embed = EmbedFactory.static_embed(
                 self.ctx,
                 "Turned off bot",
-                path=f"manage/restart",
-                description=f"The bot is now offline",
+                path="manage/restart",
+                description="The bot is now offline",
             )
             await self.bot_message.edit(embed=embed)
             return await self.ctx.bot.close()
@@ -95,10 +97,7 @@ class Manage(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="Pause", style=ButtonStyle.green)
     async def pause_button(self, button: Button, interaction: MessageInteraction):
@@ -150,9 +149,7 @@ class Manage(View):
         )
 
         await interaction.response.defer()
-        await self.bot_message.edit(
-            embed=embed, view=ConfirmShutdown(self.ctx, restart=True)
-        )
+        await self.bot_message.edit(embed=embed, view=ConfirmShutdown(self.ctx, restart=True))
 
     @button(label="Shut down", style=ButtonStyle.danger)
     async def shutdown_button(self, button: Button, interaction: MessageInteraction):

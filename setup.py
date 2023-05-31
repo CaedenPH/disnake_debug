@@ -4,23 +4,23 @@ import pathlib
 ROOT = pathlib.Path(__file__).parent
 with open(ROOT / "README.md", "r", encoding="utf-8") as f:
     README = f.read()
-__version__ = __import__("disnake-debug.__init__").__version__
+__version__ = __import__("disnake_debug.__init__").__version__
 
 setup(
-    name="disnake-debug",
-    packages=["disnake-debug", "disnake-debug.dialogs"],
+    name="disnake_debug",
+    packages=["disnake_debug", "disnake_debug.dialogs"],
     version=__version__,
     license="MIT",
-    description="A visual debugging extension for disnake discord bots including easy blacklisting, evaluation, echoing and much more!",
+    description=("A visual debugging extension for disnake discord bots;" "blacklisting, evaluation, echoing and more"),
     long_description=README,
     long_description_content_type="text/markdown",
     author="Caeden PH",
     author_email="caedenperelliharris@gmail.com",
-    url="https://github.com/CaedenPH/disnake-debug",
-    download_url=f'https://github.com/CaedenPH/disnake-debug/archive/refs/tags/v_{__version__.replace(".", "")}.tar.gz',
+    url="https://github.com/CaedenPH/disnake_debug",
+    download_url=f'https://github.com/CaedenPH/disnake_debug/archive/refs/tags/v_{__version__.replace(".", "")}.tar.gz',
     keywords=["disnake", "discord", "debugging", "visual", "extension", "cog"],
     project_urls={
-        "Code": "https://github.com/CaedenPH/disnake-debug",
+        "Code": "https://github.com/CaedenPH/disnake_debug",
     },
     install_requires=[
         "disnake",

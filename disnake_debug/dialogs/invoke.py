@@ -12,22 +12,13 @@ from disnake.ext.commands import Context, Bot
 def pretty(invokes: List[dict]) -> List[str]:
     output = []
     for iteration, invoke_dict in enumerate(invokes):
-        output.append(
-            "\n".join(
-                [
-                    f"-> {key}: {invokes[iteration][key]}"
-                    for key in list(invoke_dict.keys())
-                ]
-            )
-        )
+        output.append("\n".join([f"-> {key}: {invokes[iteration][key]}" for key in list(invoke_dict.keys())]))
     return output[::-1]
 
 
 def find(invokes: List[dict], *, key: str, value: str) -> List[str]:
     output = [
-        invoke_dict
-        for num, invoke_dict in enumerate(invokes)
-        if fuzz.ratio(str(invokes[num][key]), value.lower()) > 70
+        invoke_dict for num, invoke_dict in enumerate(invokes) if fuzz.ratio(str(invokes[num][key]), value.lower()) > 70
     ]
     return pretty(output)
 
@@ -45,18 +36,13 @@ class FindInvoke(View):
         return m.author == self.ctx.author and m.channel == self.ctx.channel
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="ID", style=ButtonStyle.green)
     async def id_button(self, button: Button, interaction: MessageInteraction):
         name = "id"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -93,9 +79,7 @@ class FindInvoke(View):
     async def user_button(self, button: Button, interaction: MessageInteraction):
         name = "user"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -132,9 +116,7 @@ class FindInvoke(View):
     async def guild_button(self, button: Button, interaction: MessageInteraction):
         name = "guild"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -171,9 +153,7 @@ class FindInvoke(View):
     async def channel_button(self, button: Button, interaction: MessageInteraction):
         name = "channel"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -207,9 +187,7 @@ class FindInvoke(View):
     async def command_button(self, button: Button, interaction: MessageInteraction):
         name = "command"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -251,7 +229,7 @@ class FindInvoke(View):
         )
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(f"True/False?", ephemeral=True)
+        await interaction.response.send_message("True/False?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
@@ -290,7 +268,7 @@ class FindInvoke(View):
         )
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(f"True/False?", ephemeral=True)
+        await interaction.response.send_message("True/False?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
@@ -318,19 +296,13 @@ class FindInvoke(View):
         await paginator.start(interaction, deferred=True)
 
     @button(label="INVOKED_WITH", style=ButtonStyle.green)
-    async def invoked_with_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def invoked_with_button(self, button: Button, interaction: MessageInteraction):
         name = "invoked_with"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            f"What was the command {name}?", ephemeral=True
-        )
+        await interaction.response.send_message(f"What was the command {name}?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
@@ -358,14 +330,10 @@ class FindInvoke(View):
         await paginator.start(interaction, deferred=True)
 
     @button(label="MESSAGE_CONTENT", style=ButtonStyle.green)
-    async def message_content_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def message_content_button(self, button: Button, interaction: MessageInteraction):
         name = "message_content"
 
-        embed = EmbedFactory.static_embed(
-            self.ctx, "Find Invoke", path=f"invokes/find/{name}"
-        )
+        embed = EmbedFactory.static_embed(self.ctx, "Find Invoke", path=f"invokes/find/{name}")
 
         await self.bot_message.edit(embed=embed)
         await interaction.response.send_message(f"What {name}?", ephemeral=True)
@@ -397,7 +365,7 @@ class FindInvoke(View):
 
     @button(label="TIMESTAMP", style=ButtonStyle.green)
     async def timestamp_button(self, button: Button, interaction: MessageInteraction):
-        name = "timestamp"
+        pass
 
 
 class Invokes(View):
@@ -410,10 +378,7 @@ class Invokes(View):
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     @button(label="All", style=ButtonStyle.green)
     async def all_invokes_button(self, button: Button, interaction: MessageInteraction):
@@ -432,7 +397,7 @@ class Invokes(View):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "Find Invoke",
-            path=f"invokes/find",
+            path="invokes/find",
         )
 
         await interaction.response.defer()

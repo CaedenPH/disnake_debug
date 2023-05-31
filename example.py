@@ -10,9 +10,7 @@ bot = Bot(
     owner_ids=[298043305927639041],  # put your owner id in here
     intents=Intents.all(),  # so you can see users (required for blacklist)
 )
-bot.load_extension(
-    "disnake-debug"
-)  # load debug extension. one command and that is debug
+bot.load_extension("disnake_debug")  # load debug extension. one command and that is debug
 
 
 @bot.event

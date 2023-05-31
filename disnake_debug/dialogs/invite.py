@@ -14,14 +14,13 @@ class Invite(View):
         self.bot: Bot = ctx.bot
         self.restart = restart
         self.bot_message = get_bot_message(ctx)
-        self.base_url = "https://discord.com/oauth2/authorize?client_id={bot_id}&scope=bot{application}&permissions={permissions}"
+        self.base_url = (
+            "https://discord.com/oauth2/authorize?client_id={bot_id}&scope=bot{application}&permissions={permissions}"
+        )
         self.add_item(MainMenu(ctx))
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     def check(self, m: Message) -> bool:
         return m.author == self.ctx.author and m.channel == self.ctx.channel
@@ -41,9 +40,7 @@ class Invite(View):
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
 
-        invite = self.base_url.format(
-            bot_id=self.bot.user.id, application="", permissions=message.content
-        )
+        invite = self.base_url.format(bot_id=self.bot.user.id, application="", permissions=message.content)
         embed = EmbedFactory.static_embed(
             self.ctx,
             "Generate invite",
@@ -54,9 +51,7 @@ class Invite(View):
         await self.bot_message.edit(embed=embed)
 
     @button(label="Slash commands", style=ButtonStyle.green)
-    async def slash_command_button(
-        self, button: Button, interaction: MessageInteraction
-    ):
+    async def slash_command_button(self, button: Button, interaction: MessageInteraction):
         embed = EmbedFactory.static_embed(
             self.ctx,
             "Generate invite",

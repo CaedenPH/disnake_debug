@@ -1,0 +1,8 @@
+[tool.black]
+line-length=120
+
+[tool.ruff]
+ignore = [
+    "F403"
+]
+line-length = 120

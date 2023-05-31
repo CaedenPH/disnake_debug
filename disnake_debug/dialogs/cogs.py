@@ -20,15 +20,12 @@ class Cogs(View):
         self.bot: Bot = ctx.bot
         self.bot_message = get_bot_message(ctx)
         self.add_item(MainMenu(ctx))
-        cog_not_found = EmbedFactory.error_embed(self.ctx, "Extension not found")
-        cog_not_loaded = EmbedFactory.error_embed(self.ctx, "Extension not loaded")
-        cog_already_loaded = EmbedFactory.error_embed(self.ctx, "Extension already")
+        EmbedFactory.error_embed(self.ctx, "Extension not found")
+        EmbedFactory.error_embed(self.ctx, "Extension not loaded")
+        EmbedFactory.error_embed(self.ctx, "Extension already")
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
-        return (
-            interaction.author == self.ctx.author
-            and interaction.channel == self.ctx.channel
-        )
+        return interaction.author == self.ctx.author and interaction.channel == self.ctx.channel
 
     def check(self, m: Message) -> bool:
         return m.author == self.ctx.author and m.channel == self.ctx.channel
@@ -42,9 +39,7 @@ class Cogs(View):
             description="What is the file path of the cog you want to load?",
         )
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What cog do you want to load?", ephemeral=True
-        )
+        await interaction.response.send_message("What cog do you want to load?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
@@ -79,9 +74,7 @@ class Cogs(View):
             description="What is the file path of the cog you want to unload?",
         )
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What cog do you want to unload?", ephemeral=True
-        )
+        await interaction.response.send_message("What cog do you want to unload?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
@@ -116,9 +109,7 @@ class Cogs(View):
             description="What is the file path of the cog you want to reload?",
         )
         await self.bot_message.edit(embed=embed)
-        await interaction.response.send_message(
-            "What cog do you want to reload?", ephemeral=True
-        )
+        await interaction.response.send_message("What cog do you want to reload?", ephemeral=True)
 
         message: Message = await self.bot.wait_for("message", check=self.check)
         if message.content == "q":
