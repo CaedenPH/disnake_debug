@@ -42,6 +42,7 @@ class FindSnowflake:
             response = await method(bot, query)
             if response:
                 return response
+        return None
 
     @staticmethod
     async def find_user(bot: Bot, query: str) -> Optional[User]:
@@ -53,13 +54,11 @@ class FindSnowflake:
                 return user
             try:
                 user = await bot.fetch_user(_id)
-                return
+                return user
             except HTTPException:
                 pass
 
-        user = utils.get(bot.users, name=query)
-        if user:
-            return user
+        return utils.get(bot.users, name=query)
 
     @staticmethod
     async def find_guild(bot: Bot, query: str) -> Optional[Guild]:
@@ -75,9 +74,7 @@ class FindSnowflake:
             except HTTPException:
                 pass
 
-        guild = utils.get(bot.guilds, name=query)
-        if guild:
-            return guild
+        return utils.get(bot.guilds, name=query)
 
     @staticmethod
     async def find_channel(bot: Bot, query: str) -> Optional[TextChannel]:
@@ -93,9 +90,7 @@ class FindSnowflake:
             except HTTPException:
                 pass
 
-        channel = utils.get(bot.get_all_channels(), name=query)
-        if channel:
-            return channel
+        return utils.get(bot.get_all_channels(), name=query)
 
     @staticmethod
     async def find_emoji(bot: Bot, query: str) -> Optional[Emoji]:
@@ -111,9 +106,7 @@ class FindSnowflake:
                 except ValueError:
                     pass
 
-        emoji = utils.get(bot.emojis, name=query)
-        if emoji:
-            return emoji
+        return utils.get(bot.emojis, name=query)
 
 
 class EmbedFactory:
@@ -124,8 +117,8 @@ class EmbedFactory:
         ctx: Context,
         title: str,
         *,
-        path: str = None,
-        description: str = None,
+        path: Optional[str] = None,
+        description: Optional[str] = None,
         markdown: str = "yaml",
     ) -> Embed:
         return (

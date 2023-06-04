@@ -82,7 +82,7 @@ class ConfirmShutdown(View):
 
     @button(label="No", style=ButtonStyle.danger)
     async def cancel_button(self, button: Button, interaction: MessageInteraction):
-        from . import DebugView
+        from .. import DebugView
 
         embed = EmbedFactory.static_embed(self.ctx, "Debug Controls")
         await self.bot_message.edit(embed=embed, view=DebugView(self.ctx))

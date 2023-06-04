@@ -18,7 +18,7 @@ VERSION = __version__
 
 BLACKLIST_HELP = """
 Send the name of the commands you want to blacklist the user from.
-    => Seperate the command names by a comma
+    => Separate the command names by a comma
     => Send 'all' to blacklist the user from every command
 """
 DESCRIPTION = f"""

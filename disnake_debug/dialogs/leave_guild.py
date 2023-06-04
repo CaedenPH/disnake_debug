@@ -20,7 +20,7 @@ class Utilities:
         self.bot: Bot = ctx.bot
         self.bot_message = get_bot_message(ctx)
 
-    async def other_guilds(self, interaction: MessageInteraction, clicked: str) -> None:
+    async def other_guilds(self, interaction: MessageInteraction) -> None:
         guilds: List[Guild] = [k for k in self.bot.guilds if ord(k.name.lower()) not in range(96, 123)]
         if not guilds:
             embed = EmbedFactory.static_embed(
@@ -52,7 +52,7 @@ class Utilities:
         if message.content == "q":
             return await interaction.message.reply("Cancelled the current `wait_for`")
 
-        selected_guild = max(
+        selected_guild: Guild = max(
             [[guild, fuzz.ratio(message.content, guild.name)] for guild in guilds],
             key=lambda m: m[1],
         )
@@ -162,8 +162,8 @@ class SelectPZ(Select):
     async def callback(self, interaction: MessageInteraction) -> None:
         clicked = self.values[0]
         if clicked == "other":
-            return await self.utils.find_other_guilds(interaction)
-        await self.utils.find_guilds(interaction)
+            return await self.utils.other_guilds(interaction)
+        await self.utils.find_guilds(interaction, clicked)
 
 
 class SelectAO(Select):
@@ -178,7 +178,7 @@ class SelectAO(Select):
     async def callback(self, interaction: MessageInteraction) -> None:
         clicked = self.values[0]
         if clicked == "other":
-            return await self.utils.find_other_guilds(interaction, clicked)
+            return await self.utils.find_guilds(interaction, clicked)
         await self.utils.find_guilds(interaction, clicked)
 
 

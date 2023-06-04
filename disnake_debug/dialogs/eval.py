@@ -1,3 +1,4 @@
+from typing import Union
 import disnake
 import io
 import contextlib
@@ -14,7 +15,7 @@ from disnake.ext import commands
 from disnake.ext.commands import Context, Bot
 
 
-async def eval_code(message: Message, local_variables: dict, method: str = "None") -> str:
+async def eval_code(message: Message, local_variables: dict, method: str = "None") -> Union[str, list]:
     code = clean_code(message.content)
     message = clean_code(message.content)
 
@@ -35,8 +36,7 @@ async def eval_code(message: Message, local_variables: dict, method: str = "None
             result = f"{stdout.getvalue()}{obj}\n"
 
     except Exception as e:
-        result = "".join(format_exception(e, e, e.__traceback__))
-        pass
+        result = "".join(format_exception(type(e), e, e.__traceback__))
 
     result = result.replace("`", "")
     message = message.replace("`", "")

@@ -28,7 +28,7 @@ class MissingDatabase(Exception):
     """
 
 
-class Debug(Cog, name="debug"):
+class Debug(Cog):
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
 
